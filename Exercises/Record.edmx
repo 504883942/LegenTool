@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Code_t">
+          <Key>
+            <PropertyRef Name="Code_Id" />
+          </Key>
+          <Property Name="Code_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code_Name" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Code_Content" Type="text" Nullable="false" />
+          <Property Name="Code_Author" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Code_UpdateTime" Type="datetime" Nullable="false" />
+          <Property Name="Code_CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="Code_ApplicationUid" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="Dictionary_t">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Description" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Record_t">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserUid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DirtionaryId" Type="int" Nullable="false" />
+          <Property Name="Times" Type="int" Nullable="false" />
+          <Property Name="Groups" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User_t">
+          <Key>
+            <PropertyRef Name="Uid" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Uid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Account" Type="varchar" MaxLength="500" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="Code_t" EntityType="Self.Code_t" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Dictionary_t" EntityType="Self.Dictionary_t" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Record_t" EntityType="Self.Record_t" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_t" EntityType="Self.User_t" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Dictionary_t">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Record_t">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserUid" Type="Guid" Nullable="false" />
+          <Property Name="DirtionaryId" Type="Int32" Nullable="false" />
+          <Property Name="Times" Type="Int32" Nullable="false" />
+          <Property Name="Groups" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User_t">
+          <Key>
+            <PropertyRef Name="Uid" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Uid" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Account" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Dictionary_t" EntityType="Self.Dictionary_t" />
+          <EntitySet Name="Record_t" EntityType="Self.Record_t" />
+          <EntitySet Name="User_t" EntityType="Self.User_t" />
+          <EntitySet Name="Code_t" EntityType="Model.Code_t" />
+        </EntityContainer>
+        <EntityType Name="Code_t">
+          <Key>
+            <PropertyRef Name="Code_Id" />
+          </Key>
+          <Property Name="Code_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code_Name" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Code_Content" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Code_Author" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Code_UpdateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Code_CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Code_ApplicationUid" Type="Guid" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Dictionary_t">
+            <EntityTypeMapping TypeName="Model.Dictionary_t">
+              <MappingFragment StoreEntitySet="Dictionary_t">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Record_t">
+            <EntityTypeMapping TypeName="Model.Record_t">
+              <MappingFragment StoreEntitySet="Record_t">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserUid" ColumnName="UserUid" />
+                <ScalarProperty Name="DirtionaryId" ColumnName="DirtionaryId" />
+                <ScalarProperty Name="Times" ColumnName="Times" />
+                <ScalarProperty Name="Groups" ColumnName="Groups" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_t">
+            <EntityTypeMapping TypeName="Model.User_t">
+              <MappingFragment StoreEntitySet="User_t">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Uid" ColumnName="Uid" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Account" ColumnName="Account" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Code_t">
+            <EntityTypeMapping TypeName="Model.Code_t">
+              <MappingFragment StoreEntitySet="Code_t">
+                <ScalarProperty Name="Code_ApplicationUid" ColumnName="Code_ApplicationUid" />
+                <ScalarProperty Name="Code_CreateTime" ColumnName="Code_CreateTime" />
+                <ScalarProperty Name="Code_UpdateTime" ColumnName="Code_UpdateTime" />
+                <ScalarProperty Name="Code_Author" ColumnName="Code_Author" />
+                <ScalarProperty Name="Code_Content" ColumnName="Code_Content" />
+                <ScalarProperty Name="Code_Name" ColumnName="Code_Name" />
+                <ScalarProperty Name="Code_Id" ColumnName="Code_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,320 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div ng-app="myApp" ng-controller="SQLController">
+
+    <h2>SQL管理网站 <span class="pull-right  btn btn-default" data-toggle="modal" data-target="#QA"><span class="glyphicon glyphicon-question-sign"></span></span></h2>
+    <div class="modal fade" id="QA" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">帮助文档</h4>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li>连接字符串 例如  <br /><code> Server=192.168.1.73;Database=数据库名字;uid=用户账号;pwd=用户密码</code></li>
+                        <li>
+                            可以在示例中下载CSV文件，列名需要和示例中一致
+                        </li>
+                        <li>
+                            自增长为Identity(1,1)
+                        </li>
+                        <li>
+                            主键为PK
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="btn-group">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
+            配置文件
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">修改配置</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">连接字符串</label>
+                                <input type="text" class="form-control" id="connectstring" placeholder="连接字符串" ng-model="connectionstring">
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" ng-click="Save()">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#File">
+            上传设计文档
+        </button>
+        <div class="modal fade" id="File" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <form action="/sql/upload" method="post" enctype="multipart/form-data" id="uploadForm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">选择文件</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">文件</label>
+                                <input type="file" class="form-control" id="file" name="file" placeholder="设计文档" accept=".csv">
+                            </div>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <a class="btn btn-primary" href="/content/实例文档.csv">示例</a>
+                            <button type="button" class="btn btn-primary" ng-click="Upload()">预览</button>
+                            <button type="button" class="btn btn-primary" ng-click="ToSql()">生成</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-default" ng-click="Example(0)">查询已有数据库</button>
+        <button type="button" class="btn btn-default" ng-click="Example(1)">查询已有表</button>
+        <button type="button" class="btn btn-default" ng-click="Example(2)">查询某表字段</button>
+
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                更多常用功能
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#">Dropdown link</a></li>
+                <li><a href="#">Dropdown link</a></li>
+            </ul>
+
+        </div>
+        <button type="button" class="btn btn-primary" value="" ng-click="Execute()">点我执行</button>
+    </div>
+ <hr />
+    <ol class="breadcrumb">
+        <li ng-repeat="item in paths"><a href="#" ng-bind="item" ng-click="Enter(item,$index)"></a></li>
+    </ol>
+    <div class="row">
+        <div class="col-md-3"  >
+            <div   class="list-group" style="height:400px;overflow-y:scroll">
+                <small>
+                    <a href="#" class="list-group-item" ng-repeat="item in currents" ng-bind="item[currentsProperty]" ng-click="Enter(item[currentsProperty],currentstype)"></a>
+                </small>
+               </div>
+        </div>
+        <div class="col-md-9"  style="height:400px;">
+            <textarea class="form-control" rows="5" id="sql" name="sql" ng-model="sql" placeholder="输入需要执行的sql语句" style="width:100%;height:100px "></textarea>
+            <table class="table   panel" style="height:300px;overflow-y:visible">
+                <thead>
+                    <tr>
+                        <td ng-repeat="item in propertys" ng-bind="item"></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in items">
+                        <td ng-repeat="property in propertys" ng-bind="item[property]"></td>
+                    </tr>
+                </tbody>
+            </table>
+         </div>
+    </div>
+
+    @*<div class="alert alert-success" ng-show="message">{{message}}</div>*@
+    <hr />
+  
+
+</div>
+
+
+<script src="~/Scripts/angular.js"></script>
+<script>
+    var myApp = angular.module('myApp', []);
+ 
+    myApp.controller('SQLController', function ($scope, $http) {
+        $scope.connectionstring =unescape( getCookie("SQL"));
+        console.log($scope.connectionstring);
+        $scope.Save = function () {
+            $('#myModal').modal('hide')
+            var expireDate = new Date();
+            expireDate.setDate(expireDate.getDate() + 1);
+            document.cookie = "SQL" + "=" + escape($scope.connectionstring) + ";expires=" + expireDate.toGMTString();
+            $scope.connectionstring = unescape(getCookie("SQL"));
+
+            $scope.init();
+        }
+        $scope.ExecuteWithCommend = function (sql, callback) {
+            $http.get('/sql/sql', { params: { sql: sql, con: $scope.connectionstring } }).success(callback);
+        }
+        $scope.init = function () {
+            $scope.paths = ["当前连接"];
+            $scope.ExecuteWithCommend("SELECT Name 数据库名 FROM Master..SysDatabases ORDER BY Name ", function (data) {
+                $scope.currents = JSON.parse(data);
+                for (var i in $scope.currents[0]) { 
+                    $scope.currentsProperty = i;
+                    break;
+                 }
+                $scope.currentstype = 1;
+            });
+        }
+        $scope.Enter = function (id, type) {
+            var cmd = "";
+            switch (type) {
+                case 0:
+                    cmd = "SELECT Name 数据库名 FROM Master..SysDatabases ORDER BY Name ";
+                    $scope.paths = ["当前连接"];
+                    $scope.currentstype = 1;
+                    $scope.table = null;
+                    break;
+                case 1:
+                    cmd = "SELECT Name " + id + " FROM SysObjects Where XType='U' ORDER BY Name";
+                    $scope.paths = ["当前连接", id];
+                    $scope.table = id;
+                    $scope.currentstype = 2;
+                    break;
+                case 2:
+                    cmd="select b.name 字段名 from sysobjects a,syscolumns b,systypes c where a.id=b.id and a.name = '"+id+"' and a.xtype = 'U'and b.xtype = c.xtype and c.name!='sysname'";
+                    $scope.paths = ["当前连接", $scope.table, id];
+                    $scope.currentstype = 3;
+                    break;
+                case 3:
+                    return;
+                    break;
+
+            }
+
+            $scope.ExecuteWithCommend(cmd, function (data) {
+                $scope.currents = JSON.parse(data);
+                for (var i in $scope.currents[0]) {
+                    $scope.currentsProperty = i;
+                    break;
+                }
+            });
+        }
+        $scope.init();
+
+
+        $scope.Execute = function () {
+            $scope.message = "";
+            if ($scope.sql!=null)
+            $http.get('/sql/sql', { params: { sql: $scope.sql, con: $scope.connectionstring } }).success(function (data) {
+                $scope.items = JSON.parse(data);
+                console.log(JSON.parse(data));
+                if (!isNaN($scope.items)) {
+                    if ($scope.items == -1) {
+                        $scope.message = "执行成功";
+                    } else {
+                        $scope.message = "有" + $scope.items + "行受影响";
+                    }
+
+                    return;
+                }
+                var p = $scope.items[0];
+                var propertys = [];
+                for (var i in p) {
+                    propertys.push(i);
+                }
+                $scope.propertys = propertys;
+            })
+        }
+        $scope.Example = function (type) {
+            switch (type) {
+                case 0:
+                    $scope.sql = "SELECT Name 数据库名 FROM Master..SysDatabases ORDER BY Name ";
+                    break;
+                case 1:
+                    $scope.sql = "SELECT Name 表名 FROM SysObjects Where XType='U' ORDER BY Name";
+                    break;
+                case 2:
+                    $scope.sql = "select a.name 表名,b.name 字段名,c.name 字段类型,c.length 字段长度 from sysobjects a,syscolumns b,systypes c where a.id=b.id and a.name = '这里输入表名' and a.xtype = 'U'and b.xtype = c.xtype and c.name!='sysname'";
+                    break;
+            }
+        }
+        $scope.Upload = function () {
+            var formData = new FormData($("#uploadForm")[0]);
+            $.ajax({
+                url: '/sql/upload',
+                type: 'POST',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (returndata) {
+                    $('#File').modal('hide')
+                    $scope.items = JSON.parse(returndata);
+                    console.log(returndata);
+                    var p = $scope.items[0];
+                    var propertys = [];
+                    for (var i in p) {
+                        propertys.push(i);
+                    }
+                    $scope.propertys = propertys;
+                },
+                error: function (returndata) {
+                    alert("格式有误");
+                }
+            });
+        }
+        $scope.ToSql = function () {
+            var formData = new FormData($("#uploadForm")[0]);
+            $.ajax({
+                url: '/sql/ToSql',
+                type: 'POST',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (returndata) {
+                    $('#File').modal('hide')
+                    $scope.sql = returndata;
+
+                },
+                error: function (returndata) {
+                    alert("格式有误");
+                }
+            });
+        }
+    });
+
+
+    function getCookie(cookie_name) {
+        var allcookies = document.cookie;
+        var cookie_pos = allcookies.indexOf(cookie_name);   //索引的长度
+        // 如果找到了索引，就代表cookie存在，
+        // 反之，就说明不存在。
+        if (cookie_pos != -1) {
+            // 把cookie_pos放在值的开始，只要给值加1即可。
+            cookie_pos += cookie_name.length + 1;      //这里容易出问题，所以请大家参考的时候自己好好研究一下
+            var cookie_end = allcookies.indexOf(";", cookie_pos);
+            if (cookie_end == -1) {
+                cookie_end = allcookies.length;
+            }
+            var value = unescape(allcookies.substring(cookie_pos, cookie_end));         //这里就可以得到你想要的cookie的值了。。。
+        }
+        return value;
+    }
+</script>

@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+ 
+<h1>登录</h1>
+<hr />
+<form id="Login" class="form-horizontal" method="post" action="/user/login">
+    <div class="form-group">
+        <label for="username" class="col-sm-2 control-label">用户名</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="username" id="username" placeholder="请输入用户名">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="password" class="col-sm-2 control-label">密码</label>
+        <div class="col-sm-10">
+            <input type="password" class="form-control" name="password" id="password" placeholder="请输入密码">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="remember" id="remember" > 记住我
+                </label>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="encrypted_pwd" id="encrypted_pwd" />
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button onclick="cmdEncrypt() " class="btn btn-info">登录</button>
+            <a class="btn btn-default" href="/user/register">注册</a>
+        </div>
+    </div>
+</form>
+<script>
+    $(document).ready(function () {
+        $("#Login").validate({
+            rules: {
+                username:{required:true},
+                password: { required: true }
+            },
+            messages: {
+                words: { required: "请输入账号" },
+                password: {required:"请输入密码"},
+            },
+            errorPlacement: function (error, element) {
+                $("#Login").addClass("has-error");
+            }
+
+        });
+    });
+</script>

@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h1>注册</h1>
+<hr />
+<form id="Login" class="form-horizontal" method="post" action="/user/register">
+    <div class="form-group">
+        <label for="username" class="col-sm-2 control-label">用户名</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="username" id="username" placeholder="请输入用户名">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="password" class="col-sm-2 control-label">密码</label>
+        <div class="col-sm-10">
+            <input type="password" class="form-control" name="password" id="password" placeholder="请输入密码">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="password" class="col-sm-2 control-label">确认密码</label>
+        <div class="col-sm-10">
+            <input type="password" class="form-control" name="repassword" id="repassword" placeholder="请输入密码">
+        </div>
+    </div>
+  
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-info">注册</button>
+            <a class="btn btn-default" href="/user/login">我已有账号</a>
+        </div>
+    </div>
+</form>
+<script>
+    $(document).ready(function () {
+        $("#Login").validate({
+            rules: {
+                username:{required:true},
+                password: { required: true },
+                repassword: { required: true,equalTo :"#password"}
+            },
+            messages: {
+                words: { required: "请输入账号" },
+                password: { required: "请输入密码" },
+                repassword: { required: "请再次输入密码",equalTo: "两次输入密码不一致" }
+            },
+            errorPlacement: function (error, element) {
+                $("#Login").addClass("has-error");
+            }
+
+        });
+    });
+</script>

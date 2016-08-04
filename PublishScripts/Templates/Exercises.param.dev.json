@@ -1,0 +1,29 @@
+{
+  "siteName": {
+    "value": "ExercisesRecord"
+  },
+  "hostingPlanName": {
+    "value": "Exercises5005"
+  },
+  "siteLocation": {
+    "value": "South Central US"
+  },
+  "sku": {
+    "value": "Free"
+  },
+  "workerSize": {
+    "value": "0"
+  },
+  "siteMode": {
+    "value": "Limited"
+  },
+  "computeMode": {
+    "value": "0"
+  },
+  "subscriptionId": {
+    "value": "e17ced13-0823-4d7e-9843-9370f97c4c90"
+  },
+  "resourceGroup": {
+    "value": "develop"
+  }
+}
